@@ -1,0 +1,51 @@
+volatile int velocidad = 20;
+const int maxima = 1000;
+const int minima = 20;
+const int aumenta = 20;
+ 
+int leds[5] = {8, 9, 10, 11, 12};
+ 
+void setup() {
+    for (int i = 0; i < 5; i++){
+    pinMode(leds[i], OUTPUT);
+    digitalWrite(leds[i], LOW);
+  }
+  velocidad = minima;
+  attachInterrupt(digitalPinToInterrupt(2), velocidadMenos, RISING);
+  attachInterrupt(digitalPinToInterrupt(3), velocidadMas, RISING);
+}
+ 
+void loop() {
+  for (int i = 0; i < 5; i++){
+    if (i > 0){
+      digitalWrite(leds[i - 1], LOW);
+    }
+    digitalWrite(leds[i], HIGH);
+    delay(velocidad);
+  }
+ 
+   digitalWrite(leds[4], LOW);
+ 
+  for (int i = 4; i >= 0; i--){
+    if (i < 4){
+     digitalWrite(leds[i + 1], LOW);
+    }
+    digitalWrite(leds[i], HIGH);
+    delay(velocidad);
+  }
+  digitalWrite(leds[0], LOW);
+}
+
+void velocidadMenos(){
+  velocidad = velocidad - aumenta;
+  if (velocidad < minima){
+    velocidad = minima;
+  }
+}
+ 
+void velocidadMas(){
+  velocidad = velocidad + aumenta;
+  if (velocidad > maxima){
+    velocidad = maxima;
+  }
+}
